@@ -15,6 +15,7 @@
  */
 package io.dropwizard.jetty;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -75,7 +76,7 @@ public class NetUtil {
             // - Linux and Mac OS X: 128
             final File file = new File(TCP_BACKLOG_SETTING_LOCATION);
             try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-                return Integer.parseInt(in.readLine().trim());
+                return Integer.parseInt(BoundedLineReader.readLine(in, 5_000_000).trim());
             } catch (SecurityException | IOException | NumberFormatException | NullPointerException e) {
                 return tcpBacklog;
             }
